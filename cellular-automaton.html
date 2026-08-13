@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Automaton</title>
+    <link rel="stylesheet" href="global.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.min.js"></script>
+    <style>
+        html { background: #ffffff !important; overflow-x: hidden; }
+        body { background: #ffffff !important; margin: 0; padding: 10px; overflow-x: hidden; }
+        h1 { text-align: center; font-family: 'Montserrat Alternates', sans-serif; font-size: 1.4rem; margin: 8px 0; }
+        .estados { text-align: center; }
+        .cen { text-align: center; }
+        .canvas { padding: auto; margin: auto; text-align: center; border: 0.5px solid #000000; }
+        .cell-btn { border-width: 0.1px; flex: 1; height: 14px; display: inline-block; cursor: pointer; padding: 0; }
+        .cell-btn.black { background-color: black; }
+        .cell-btn.white { background-color: whitesmoke; }
+        .disp-btn { background-color: white; border-width: 0.1px; color: white; height: 15px; width: 15px; display: inline-block; font-size: 16px; cursor: not-allowed; pointer-events: none; }
+        .disp-btn.black { background-color: black; }
+        .disp-btn.white { background-color: whitesmoke; }
+        .red-btn { background-color: red; border-width: 0.1px; width: 12px; height: 14px; display: inline-block; cursor: pointer; }
+        .green-btn { background-color: green; border-width: 0.1px; width: 12px; height: 14px; display: inline-block; cursor: pointer; }
+        .config-inicial { display: inline-block; }
+        .arrow-img { width: 25px; height: auto; display: block; margin: 0 auto; }
+        .tooltip-wrap { position: relative; display: inline-block; font-size: 13px; }
+        .tooltip-wrap .tip { visibility: hidden; width: 110px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -55px; opacity: 0; transition: opacity 0.3s; }
+        .tooltip-wrap .tip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #555 transparent transparent transparent; }
+        .tooltip-wrap:hover .tip { visibility: visible; opacity: 1; }
+        .subidc { vertical-align: sub; font-size: 8pt; }
+        #about-section { max-width: 800px; margin: 20px auto; padding: 0 20px; font-family: sans-serif; }
+        #about-section p { color: #333; }
+        .rule-input { width: 60px; text-align: center; }
+    </style>
+</head>
+<body style="background: white; display: block;">
+
+    <h1>Cellular Stuff!</h1>
+
+    <div class="estados">
+        <div style="display: inline-block; margin: 10px;">
+            <label id="ruleL">Rule number</label><br>
+            <span style="font-size:12px;">Decimal<span class="subidc">10</span></span>
+            <input value="30" id="rule" type="text" class="rule-input">
+            <br>
+            <input id="ruleB" disabled type="text" class="rule-input" value="00011110">
+            <br>
+            <span style="font-size:12px;">Binary<span class="subidc">2</span></span>
+        </div>
+    </div>
+
+    <div class="estados" id="rule-buttons">
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">1 1 1</span>
+            <div><button class="disp-btn black"></button><button class="disp-btn black"></button><button class="disp-btn black"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn black" id="c7" value="1"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">1 1 0</span>
+            <div><button class="disp-btn black"></button><button class="disp-btn black"></button><button class="disp-btn white"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn black" id="c6" value="1"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">1 0 1</span>
+            <div><button class="disp-btn black"></button><button class="disp-btn white"></button><button class="disp-btn black"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn black" id="c5" value="1"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">1 0 0</span>
+            <div><button class="disp-btn black"></button><button class="disp-btn white"></button><button class="disp-btn white"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn white" id="c4" value="0"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">0 1 1</span>
+            <div><button class="disp-btn white"></button><button class="disp-btn black"></button><button class="disp-btn black"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn white" id="c3" value="0"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">0 1 0</span>
+            <div><button class="disp-btn white"></button><button class="disp-btn black"></button><button class="disp-btn white"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn white" id="c2" value="0"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">0 0 1</span>
+            <div><button class="disp-btn white"></button><button class="disp-btn white"></button><button class="disp-btn black"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn black" id="c1" value="1"></button></div>
+        </div>
+        <div class="tooltip-wrap" style="margin: 0 4px;">
+            <span class="tip">0 0 0</span>
+            <div><button class="disp-btn white"></button><button class="disp-btn white"></button><button class="disp-btn white"></button></div>
+            <div style="text-align:center; font-size:18px;">&#8595;</div>
+            <div><button style="width: 12px;" class="cell-btn white" id="c0" value="0"></button></div>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin: 10px;">
+        <div style="display:inline-block; margin: 0 10px;">
+            <p>Play/Pause</p>
+            <button id="stap" class="red-btn" value="stopd"></button>
+        </div>
+        <div style="display:inline-block; margin: 0 10px;">
+            <p>Reset</p>
+            <button id="reset" class="green-btn"></button>
+        </div>
+    </div>
+
+    <div style="text-align:center; width: 100vw; display: flex" id="init-config"></div>
+
+    <div id="canvas-component" style="width: 100vw;" class="canvas"></div>
+
+    <div id="about-section">
+        <h5>What is a one-dimensional binary cellular automaton?</h5>
+        <p>
+            A cellular automaton is a mathematical model and abstract machine used in many scientific fields
+            such as physics, cryptography, computing, and biology. It was inspired in the behaviour of
+            natural cellular interaction and neural networks by von Newman and Stanislaw Ulam.
+            <br><br>
+            The automaton can be n-dimensional, this means it has its cells distributed in as many axis as it has,
+            in this case, 1 dimension, so they interact with themselves in 1 direction.
+            <br>
+            Cells within can have more than one state, in this case (binary), only 2: <b>0</b> or <b>1</b>,
+            <b>white</b> or <b>black</b>, <b>dead</b> or <b>alive</b>. This is dictated by the rule.
+            <br>
+            The first and last cell of this automaton interact with each other, it behaves as a periodic border.
+        </p>
+        <h5><b>How does it work?</b></h5>
+        <p>
+            -The long line of buttons represent the actual cell state; how the cells are distributed in the
+            one-dimensional space according to their last state and rule.<br>
+            -The buttons below the arrows are the state result of the previous configuration (each cell and its 2 neighbours). This result
+            can be altered in order to change their rule.
+            In order to make it work, just press all these buttons.<br>
+            Below the buttons we have a temporal representation (<b>y-axis</b>) of the cellular automaton (the only
+            dimension represented on the <b>x-axis</b>).
+        </p>
+        <h5>About the project</h5>
+        <p>
+            Cellular Stuff is an interactive educative webpage, built with <b>Angular 9</b> and <u><b><a style="color: black;" href='https://p5js.org' target="_blank">p5.js</a></b></u> by Ferran Ramirez Marti,
+            a Software Engineer graduated in Computer Science in the UPV in Spain.
+        </p>
+    </div>
+
+    <script>
+        const INIT_NUM = 100;
+        let ACin = new Array(INIT_NUM).fill(0);
+        let tam = 0;
+        let y = 0;
+        let x = 0;
+        let regla = [];
+        let num = 30;
+        let p5Instance;
+
+        function ruleList(n) {
+            let numB = n.toString(2);
+            while (numB.length < 8) numB = '0' + numB;
+            return [
+                [0,0,0, Number(numB[7])],
+                [0,0,1, Number(numB[6])],
+                [0,1,0, Number(numB[5])],
+                [0,1,1, Number(numB[4])],
+                [1,0,0, Number(numB[3])],
+                [1,0,1, Number(numB[2])],
+                [1,1,0, Number(numB[1])],
+                [1,1,1, Number(numB[0])]
+            ];
+        }
+
+        function ruleListInv(list) {
+            return parseInt(list.split('').reverse().join(''), 2);
+        }
+
+        function nextConfig(ACini, rule) {
+            let len = ACini.length;
+            let res = [];
+            let j = 0;
+            for (j = 0; j < 8; j++) {
+                if (ACini[len-1] == rule[j][0] && ACini[0] == rule[j][1] && ACini[1] == rule[j][2]) break;
+            }
+            res[0] = rule[j][3];
+            for (let i = 1; i < len - 1; i++) {
+                for (j = 0; j < 8; j++) {
+                    if (ACini[i-1] == rule[j][0] && ACini[i] == rule[j][1] && ACini[i+1] == rule[j][2]) break;
+                }
+                res[i] = rule[j][3];
+            }
+            for (j = 0; j < 8; j++) {
+                if (ACini[len-2] == rule[j][0] && ACini[len-1] == rule[j][1] && ACini[0] == rule[j][2]) break;
+            }
+            res[len-1] = rule[j][3];
+            return res;
+        }
+
+        function setButtonVC(cx, v) {
+            let btn = document.getElementById(cx);
+            if (!btn) return;
+            btn.className = v == 1 ? "cell-btn black" : "cell-btn white";
+            btn.value = v.toString();
+        }
+
+        function getCVal(id) {
+            return Number(document.getElementById(id).value);
+        }
+
+        function updateRuleButtons() {
+            regla = ruleList(num);
+            for (let i = 0; i < 8; i++) {
+                setButtonVC('c' + i, regla[7 - i][3]);
+            }
+        }
+
+        function updateRuleFromButtons() {
+            let vals = '';
+            for (let i = 7; i >= 0; i--) {
+                vals += getCVal('c' + i);
+            }
+            num = ruleListInv(vals);
+            document.getElementById('rule').value = num;
+            document.getElementById('ruleB').value = vals.split('').reverse().join('');
+            regla = ruleList(num);
+        }
+
+        function buildInitConfig() {
+            let container = document.getElementById('init-config');
+            container.innerHTML = '';
+            for (let i = 0; i < INIT_NUM; i++) {
+                let btn = document.createElement('button');
+                btn.className = 'cell-btn white';
+                btn.id = 'd' + i;
+                btn.value = '0';
+                btn.addEventListener('click', function() {
+                    let v = (ACin[i] - 1) * (-1);
+                    ACin[i] = v;
+                    setButtonVC('d' + i, v);
+                });
+                container.appendChild(btn);
+            }
+        }
+
+        function setupRuleButtonHandlers() {
+            for (let i = 0; i < 8; i++) {
+                (function(idx) {
+                    document.getElementById('c' + idx).addEventListener('click', function() {
+                        let cur = Number(this.value);
+                        let nv = (cur - 1) * (-1);
+                        setButtonVC('c' + idx, nv);
+                        updateRuleFromButtons();
+                    });
+                })(i);
+            }
+        }
+
+        const sketch = function(p) {
+            p.setup = function() {
+                let canvasContainer = document.getElementById('canvas-component');
+                let cnv = p.createCanvas(p.windowWidth, p.windowHeight);
+                cnv.parent('canvas-component');
+                p.background(255);
+                tam = p.width / INIT_NUM;
+                p.frameRate(0);
+                y = p.height - 15 - tam;
+
+                document.getElementById('stap').addEventListener('click', function() {
+                    if (this.value === 'playd') {
+                        p.frameRate(0);
+                        this.value = 'stopd';
+                    } else {
+                        p.frameRate(30);
+                        this.value = 'playd';
+                    }
+                });
+
+                document.getElementById('reset').addEventListener('click', function() {
+                    for (let i = 0; i < INIT_NUM; i++) {
+                        ACin[i] = 0;
+                        setButtonVC('d' + i, 0);
+                    }
+                });
+
+                document.getElementById('rule').addEventListener('input', function() {
+                    let val = Number(this.value);
+                    if (!isNaN(val) && val >= 0 && val <= 255) {
+                        num = val;
+                        updateRuleButtons();
+                    }
+                });
+
+                updateRuleButtons();
+            };
+
+            p.draw = function() {
+                let ruleInput = Number(document.getElementById('rule').value);
+                if (ruleInput !== num && !isNaN(ruleInput) && ruleInput >= 0 && ruleInput <= 255) {
+                    num = ruleInput;
+                    updateRuleButtons();
+                }
+
+                for (let i = 0; i < INIT_NUM; i++) {
+                    setButtonVC('d' + i, ACin[i]);
+                }
+
+                updateRuleFromButtons();
+
+                x = 0;
+                if (p.frameCount % 2 === 0) {
+                    ACin.forEach(function(sq) {
+                        if (sq === 1) {
+                            p.fill(sq * (-240) + 255);
+                            p.noStroke();
+                            p.square(x, y, tam - 0.7);
+                        }
+                        x += tam;
+                    });
+                    ACin = nextConfig(ACin, regla);
+                    p.copy(0, 0, p.windowWidth, p.windowHeight, 0, -(tam) / 2, p.windowWidth, p.windowHeight);
+                }
+            };
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            buildInitConfig();
+            setupRuleButtonHandlers();
+            updateRuleButtons();
+            p5Instance = new p5(sketch);
+        });
+    </script>
+</body>
+</html>

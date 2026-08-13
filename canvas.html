@@ -5,25 +5,23 @@
     <title>❤ css & js stuff ❤</title>
     <link rel="stylesheet" href="global.css" />
     <style>
+        html, body { margin: 0; padding: 0; overflow: hidden; width: 100%; height: 100%; }
         #main_canvas {
-            border: 1px solid white;
-            border-radius: 9px;
+            display: block;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 
 <body>
-    <a class="back button" href="index.html"><b>⬅</b></a>
-    <div class="container">
-        <canvas id="main_canvas"></canvas>
-    </div>
+    <canvas id="main_canvas"></canvas>
     <script>
         let canvas = document.getElementById('main_canvas')
         let context = canvas.getContext('2d')
 
         let x, y = null
-        let bx = 200
-        let by = 100
 
         // on canvas movement activator
         show = (e) => {
@@ -74,8 +72,11 @@
         canvas.onmouseleave = canvas.ontouchcancel = stopAction
         canvas.ontouchmove = canvas.onmousemove = show
 
-        canvas.setAttribute('width', 400)
-        canvas.setAttribute('height', 200)
+        canvas.setAttribute('width', window.innerWidth)
+        canvas.setAttribute('height', window.innerHeight)
+
+        let bx = window.innerWidth / 2
+        let by = window.innerHeight / 2
 
         context.lineWidth = 5
         context.strokeStyle = "white"

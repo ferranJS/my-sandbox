@@ -39,29 +39,17 @@
          --main-color: #584099;
          --secondary-color: #d4d6f8;
       }
-      body {
-         overflow: hidden;
-         position: relative;
-         background-color: #05060a;
-      }
-      /* Works on Firefox */
-      * {
-         overflow-x: hidden;
-         scrollbar-width: thin;
-         scrollbar-color: var(--main-color) var(--secondary-color);
-      }
-      /* Works on Chrome, Edge, and Safari */
-      *::-webkit-scrollbar {
-         width: 12px;
-      }
-      *::-webkit-scrollbar-track {
-         background: var(--secondary-color);
-      }
-      *::-webkit-scrollbar-thumb {
-         background-color: var(--main-color);
-         border-radius: 20px;
-         border: 3px solid var(--secondary-color);
-      }
+       body {
+          overflow: hidden;
+          position: relative;
+          background-color: #05060a;
+       }
+       * {
+          scrollbar-width: none;
+       }
+       *::-webkit-scrollbar {
+          display: none;
+       }
       *::selection {
          background: var(--secondary-color);
          color: var(--main-color);
@@ -92,25 +80,13 @@
 </head>
 
 <body>
-   <a class="back-button" href="index.html"><b>⬅</b></a>
+   <!-- <a class="back-button" href="index.html"><b>⬅</b></a> -->
    <canvas id="bgCanvas"></canvas>
-   <div id="first-section">
-      <h1> Purple Rain! </h1>
-   </div>
+    <div id="first-section">
+       <h1> Purple Rain! </h1>
+    </div>
 
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <p style="height:300px"></p>
-   <script>
+    <script>
       let bgCanvas = document.createElement('canvas');
       bgCanvas = document.getElementById('bgCanvas');
       let bgCtx = bgCanvas.getContext('2d');

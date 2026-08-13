@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color contrast seter</title>
+    <link rel="stylesheet" href="../global.css" />
+    <style>
+        p{ font-size:17px; }
+    </style>
+</head>
+<body>
+    <div style="margin:5%;">
+        <div style="display:inline-block;">
+            <p>Background color</p>
+            <input data-jscolor="{value:'#3399FF80'}", onInput="updateBackground(this.jscolor)" style="width:70px">
+        </div>
+        <div style="display:inline-block;">
+            <p>Text color</p>
+            <input id="textChanger" data-jscolor="{value:'#3399FF80'}", onInput="updateText(this.jscolor)" style="width:70px">
+        </div>
+
+        <div id="background" style="padding:2rem; font-size:2.5rem; margin:10%; text-align:center;">
+            El texto en cuestión hah
+        </div>
+    </div>
+
+    <script src="libraries/jscolor.js"></script>
+    <script src="https://unpkg.com/brain.js"></script>
+    <script type="text/javascript">
+        //data input : bg color -> text color
+        var neuralNetwork = new brain.NeuralNetwork();
+        neuralNetwork.train([
+            //black->white
+            {input: {r:0, g:0, b:0}, output: {r:1, g:1, b:1}},
+            //white->black
+            {input: {r:1, g:1, b:1}, output: {r:0, g:0, b:0}},
+            //red->pastel
+            {input: {r:1, g:0, b:0}, output: {r:1, g:0.64, b:0.74}},
+            //yellow->redish
+            {input: {r:1, g:1, b:0}, output: {r:1, g:0.5, b:0.5}},
+            //blue->cian
+            {input: {r:0, g:0, b:1}, output: {r:0.7, g:0.7, b:1}},
+            //green->purple
+            {input: {r:0, g:1, b:0}, output: {r:0.4, g:0.14, b:0.7}},
+            //orange->black redish
+            {input: {r:1, g:0.67, b:0}, output: {r:0.2, g:0, b:0}},
+            //bluish->white bluish
+            {input: {r:0, g:0.125, b:1}, output: {r:0.75, g:0.75, b:1}},
+            //strong purple->white pink
+            {input: {r:0.52, g:0.125, b:0.73}, output: {r:0.92, g:0.72, b:1}},
+            //strong cian-> white cian
+            {input: {r:0.43, g:0.45, b:1}, output: {r:0.58, g:0.79, b:1}},
+            //brownish green->yellow
+            {input: {r:0.38, g:0.59, b:0.03}, output: {r:0.93, g:1, b:0.14}}
+        ]);
+        
+        function updateBackground(color) { 
+		
+			var div = document.getElementById("background");
+			div.style.background = color.toHEXString();
+
+			var input = {
+				r: color.channels.r/255,
+				g: color.channels.g/255,
+				b: color.channels.b/255,
+			};
+            //0-1 values to hexadecimal values into the background color
+            var output = neuralNetwork.run(input);
+            var red = Math.trunc(output.r*255).toString(16);
+            var green = Math.trunc(output.g*255).toString(16);
+            var blue = Math.trunc(output.b*255).toString(16);
+            console.log({red, blue, green});
+            if(red.length == 1) red = "0" + red; else if(red.length == 0) red = "00";
+            if(green.length == 1) green = "0" + green; else if(green.length == 0) green = "00";
+            if(blue.length == 1) blue = "0" + blue; else if(blue.length == 0) blue = "00";
+            var hex = "#" + red + green + blue + "FF";
+            console.log(hex);
+            div.style.color = hex;
+            //update textChanger value from the text ( should be in updateText() )
+            var tCh = document.getElementById("textChanger");
+            tCh.value=hex;
+        }
+
+        function updateText(color) { 
+            
+        }
+    </script>
+</body>
+</html>
