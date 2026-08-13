@@ -344,18 +344,18 @@ function next() {
     //canvas->video
     if(video_in.className == "hidden_video" && video_out.className == "hidden_video") {
         video_in.className = "video"
-        nextTxt.textContent = "Vídeo\nresultado "
+        nextTxt.textContent = "Result\nVideo "
         return
     //video->output
     } if(video_in.className == "video"){
         video_in.className = "hidden_video"
         video_out.className = "video"
-        nextTxt.textContent = "Dibujar "
+        nextTxt.textContent = "Draw "
         return
     }
     //output->canvas
     video_out.className = "hidden_video"
-    nextTxt.textContent = "Controles\ndel vídeo "
+    nextTxt.textContent = "Video\nControls "
 }
 
 function shortenLog() {

@@ -27,7 +27,7 @@
 </head>
 
 <body style="background:rgb(61, 63, 70)">
-	<div style="position:absolute;top:14px;left:22px;z-index:900000;pointer-events:none">p r o t o t i p o !</div>
+	<div style="position:absolute;top:14px;left:22px;z-index:900000;pointer-events:none">p r o t o t y p e !</div>
 	<div id="media-container">
 		<!-- https://css-tricks.com/what-does-playsinline-mean-in-web-video/ -->
 		<video id="video_in" class="hidden_video" controls autoplay muted loop playsinline>
@@ -43,49 +43,45 @@
 			<canvas id="nodes-canvas" class="canvas" style="position:absolute;z-index:3;top:0;left:0;opacity:0"></canvas>
 
 			<div id="tweeks">
-				<input id="slider" type="range" min="2" max="10" step="0.03" value=6>
-				<div id="colorPicker-container">
+				<input id="slider" type="range" min="2" max="10" step="0.03" value=6 title="Brush size">
+				<div id="colorPicker-container" title="Color picker">
 					<input id="colorPicker" type="color" name="head" value="#ffe5e5">
 				</div>
 				<input id="modoLineas" type="radio" name="modo" onclick="selectMode('lines')" checked>
-				<label for="modoLineas" class="radio">
+				<label for="modoLineas" class="radio" title="Line mode: draw straight lines between two points. Click to start, drag to preview, release to place. Lines can be moved when this mode is off.">
 					<i class="fa fa-slash" aria-hidden="true"></i>
 				</label>
 				<input id="modoPintar" type="radio" name="modo" onclick="selectMode('paint')">
-				<label for="modoPintar" class="radio">
+				<label for="modoPintar" class="radio" title="Paint mode: freehand drawing. Click and drag to paint freely.">
 					<i class="fa fa-pencil" aria-hidden="true"></i>
 				</label>
 				<input id="modoCirculos" type="radio" name="modo" onclick="selectMode('circles')">
-				<label for="modoCirculos" class="radio">
+				<label for="modoCirculos" class="radio" title="Circle mode: draw circles. Click to set center, drag to set radius.">
 					<i class="far fa-circle" aria-hidden="true"></i>
 				</label>
 				<input id="modoGrab" type="radio" name="modo" onclick="modo = 'grab'">
-				<!-- <label for="modoGrab" class="radio disabled">
-					<i class="fa fa-eraser" aria-hidden="true"></i>
-				</label> -->
-				<!-- 
-				<input id="modoBorrar" type="radio" name="modo" onclick="selectMode('borrar')" disabled>
-				<label for="modoBorrar" class="radio disabled">
-					<i class="fa fa-eraser" aria-hidden="true"></i>
-				</label> -->
-				<input id="videoRecord" type="checkbox">
-				<label for="videoRecord" class="radio">
+				<label for="modoGrab" class="radio" title="Grab mode: drag existing lines and nodes to reposition them.">
+					<i class="fa fa-hand-paper" aria-hidden="true"></i>
+				</label>
+				<input id="videoRecord" type="checkbox" title="Record video of your drawing session">
+				<label for="videoRecord" class="radio" title="Record video of your drawing session">
 					<i class="fa fa-compact-disc" aria-hidden="true"></i>
 				</label>
-				<button onclick="undo()">
+				<button onclick="undo()" title="Undo last action">
 					<i class="fa fa-undo" aria-hidden="true"></i>
 				</button>
 				
-				<button onclick="clearCanvas()">
+				<button onclick="clearCanvas()" title="Clear all drawings">
 					<i class="fa fa-trash" aria-hidden="true"></i>
 				</button>
-				<!-- <div style="width:20px;height:60px;"></div> -->
-				<button onclick="next()" style="height:80px;display:block">
-					<p style="white-space:pre" id="nextTxt">Controles
-del vídeo </p> <br>
+				<button onclick="next()" style="height:80px;display:block" title="Switch between drawing, video preview, and result video">
+					<p style="white-space:pre" id="nextTxt">Video
+Controls </p> <br>
 					<i class="fa fa-arrow-right" aria-hidden="true"></i>
 				</button>
-				<button id="goFS"><i class="fa fa-expand" aria-hidden="true"></i></button>
+				<button id="goFS" title="Toggle fullscreen">
+					<i class="fa fa-expand" aria-hidden="true"></i>
+				</button>
 				<script>
 					var goFS = document.getElementById("goFS");
 					goFS.addEventListener("click", function() {

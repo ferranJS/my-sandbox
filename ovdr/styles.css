@@ -57,12 +57,10 @@ button, .radio {
     display: inline-flex;
     height: 40px;
     justify-content: center;
-    /* line-height: 1; */
     list-style: none;
     overflow: hidden;
     padding-left: 10px;
     padding-right: 10px;
-    /* position: relative; */
     text-align: left;
     text-decoration: none;
     transition: transform .15s;
@@ -76,6 +74,23 @@ button, .radio {
     pointer-events: all;
     -webkit-tap-highlight-color: transparent;
     margin-right: 0;
+    position: relative;
+}
+
+button:hover::after, .radio:hover::after {
+    content: attr(title);
+    position: absolute;
+    right: 110%;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1a1a2e;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .disabled, button:disabled, .disabled:hover, button:disabled {

@@ -36,7 +36,7 @@
          transition: 0.2s;
       }
       :root {
-         --main-color: #584099;
+         --main-color: #5c37c2;
          --secondary-color: #d4d6f8;
       }
        body {
@@ -103,7 +103,7 @@
          bgCanvas.width = bgCanvas.clientWidth;
          bgCanvas.height = bgCanvas.clientHeight;
          bgCtx.fillStyle = "#d4d6f8"; //"#8d92f666"
-         bgCtx.strokeStyle = "#584099";
+         bgCtx.strokeStyle = "#5c37c2";
 
          // bgCtx.beginPath();
          // bgCtx.arc(500, 500, 500, 0, 2 * Math.PI);
@@ -114,13 +114,17 @@
       bgCanvas.height = bgCanvas.clientHeight;
 
       bgCtx.fillStyle = "#d4d6f8";
-      bgCtx.strokeStyle = "#584099";
+      bgCtx.strokeStyle = "#5c37c2";
       class Drop {
          constructor(x, y, height, width) {
             this.x = x;
             this.y = y;
             this.height = height;
             this.width = width;
+            this.vx = 0;
+            this.vy = 0;
+            this.opacity = 1;
+            this.bouncing = false;
          }
       }
       let drops = [];
@@ -136,48 +140,53 @@
       let drawDrops = _ => {
          drops.forEach(drop => {
 
-            if (drop.y > bgCanvas.clientHeight || drop.width < 1 || drop.height < 1) {
+            if (drop.y > bgCanvas.clientHeight || drop.width < 0.5 || drop.height < 0.5 || drop.opacity <= 0) {
                drop.y = Math.random() * -2000;
                drop.x = Math.random() * (bgCanvas.clientWidth + 30) - 15;
                drop.height = Math.random() * 20 + 10;
                drop.width = drop.height / 6;
+               drop.vx = 0;
+               drop.vy = 0;
+               drop.opacity = 1;
+               drop.bouncing = false;
                return;
             }
-            // fall as such
-            drop.y += drop.width;
-            // dont draw if above screen
-            if (drop.y < - 50) {
-               return;
+
+            if (drop.bouncing) {
+               drop.x += drop.vx;
+               drop.y += drop.vy;
+               drop.vy += 0.15;
+               drop.opacity -= 0.03;
+               drop.height *= 0.97;
+            } else {
+               drop.y += drop.width;
             }
-            // colision with h1
-            if (drop.x > h1Element.offsetLeft + 20 && drop.x < h1Element.offsetLeft + h1Element.offsetWidth - 20 && drop.width > passThroughThreshold) {
-               // drop desapears
-               if (drop.y > h1Element.offsetTop - drop.height + 90)
-                  return;
-               // drop shrinks
-               if (drop.y > h1Element.offsetTop - drop.height + 43) {
-                  drop.height -= drop.width;
-                  splash(drop.width, drop.height, drop.x, drop.y);
+
+            if (drop.y < -50) return;
+
+            if (!drop.bouncing && drop.width > passThroughThreshold) {
+               let hLeft = h1Element.offsetLeft + 20;
+               let hRight = h1Element.offsetLeft + h1Element.offsetWidth - 20;
+               let hTop = h1Element.offsetTop;
+               let hBottom = h1Element.offsetTop + h1Element.offsetHeight;
+
+               if (drop.x > hLeft && drop.x < hRight && drop.y > hTop + 28 && drop.y < hBottom) {
+                  drop.bouncing = true;
+                  drop.y = hTop - drop.height;
+                  drop.vx = (Math.random() - 0.5) * 1.5;
+                  drop.vy = -(Math.random() * 1 + 0.3);
                }
             }
+
+            bgCtx.globalAlpha = drop.opacity;
+            bgCtx.fillStyle = "#d4d6f8";
             bgCtx.beginPath();
-            bgCtx.rect(drop.x, drop.y, drop.width, drop.height);
+            bgCtx.arc(drop.x + drop.width / 2, drop.y + drop.height / 2, drop.width / 2, 0, Math.PI * 2);
             bgCtx.fill();
-            bgCtx.stroke();
+            bgCtx.globalAlpha = 1;
          });
       };
 
-      let splash = (w, h, x, y) => {
-         bgCtx.lineWidth = w;
-         bgCtx.strokeStyle = "#d4d6f8";
-         bgCtx.beginPath();
-         bgCtx.moveTo(x, y + w * 6);
-         bgCtx.lineTo(x + w * 3, y + w * 3);
-         bgCtx.fill();
-         bgCtx.stroke();
-         bgCtx.lineWidth = 1;
-         bgCtx.strokeStyle = "#584099";
-      };
       let a = false;
       setTimeout(_ => {
          a = true;
