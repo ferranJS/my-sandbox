@@ -5,8 +5,14 @@
     <link rel="stylesheet" href="global.css" />
 </head>
 <body>
-    <h1 style="color: #ececec;background-color: #0f0f13; padding: 50px;">❤ Things I did when I was learning ❤</h1>
+    <h1 style="color: #ececec;background-color: #0f0f13; padding: 50px; padding-bottom: 20px;">❤ Things I did when I was learning ❤ (between 2019 and 2023)</h1>
     <div class="grid-container">
+        <div class="grid-item tasle">
+            <iframe src="https://ferranjs.github.io/tasle/" title="Tesla Landing Clone"></iframe>
+        </div>
+        <div class="grid-item lavelada">
+            <iframe src="https://ferranjs.github.io/lavelada-remake/" title="Lavelada.es Rework"></iframe>
+        </div>
         <div class="grid-item ovdr">
             <h3>Video Drawing and Recording Tool</h3>
             <iframe src="ovdr/index.html"></iframe>
@@ -58,7 +64,57 @@
                     <p><a href="https://gitlab.com/ferranJS/spell-sugester" target="_blank">View on GitLab</a></p>
                 </div>
             </div>
+            <div class="python-project">
+                <a href="https://ferranjs.github.io/old-portfolio/" target="_blank">
+                    <img src="https://opengraph.githubassets.com/1/ferranJS/old-portfolio" alt="Old Portfolio" style="width:48px;height:48px;border-radius:6px;object-fit:cover;">
+                </a>
+                <div class="python-info">
+                    <h3>Old Portfolio</h3>
+                    <p><a href="https://ferranjs.github.io/old-portfolio/" target="_blank">View Project</a></p>
+                </div>
+            </div>
+            <div class="python-project">
+                <a href="https://ferranjs.github.io/process-auto-time-tracker/" target="_blank">
+                    <img src="https://opengraph.githubassets.com/1/ferranJS/process-auto-time-tracker" alt="Process Auto Time Tracker" style="width:48px;height:48px;border-radius:6px;object-fit:cover;">
+                </a>
+                <div class="python-info">
+                    <h3>Process Auto Time Tracker</h3>
+                    <p><a href="https://ferranjs.github.io/process-auto-time-tracker/" target="_blank">View Project</a></p>
+                </div>
+            </div>
         </div>
     </div>
+    <button class="skip-btn" onclick="skipToNext()" title="Next project">↓</button>
+    <script>
+        function skipToNext() {
+            const items = document.querySelectorAll('.grid-item');
+            const scrollPos = window.scrollY + window.innerHeight * 0.3;
+            let next = null;
+            for (const item of items) {
+                if (item.getBoundingClientRect().top + window.scrollY > scrollPos + 50) {
+                    next = item;
+                    break;
+                }
+            }
+            if (next) {
+                next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        const skipBtn = document.querySelector('.skip-btn');
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.scrollY + window.innerHeight;
+            const docHeight = document.documentElement.scrollHeight;
+            if (docHeight - scrollPos < 200) {
+                skipBtn.style.opacity = '0';
+                skipBtn.style.pointerEvents = 'none';
+            } else {
+                skipBtn.style.opacity = '1';
+                skipBtn.style.pointerEvents = 'auto';
+            }
+        });
+    </script>
 </body>
 </html>

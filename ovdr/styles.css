@@ -66,7 +66,6 @@ button, .radio {
     transition: transform .15s;
     user-select: none;
     -webkit-user-select: none;
-    touch-action: manipulation;
     white-space: nowrap;
     will-change: box-shadow, transform;
     padding: auto;
