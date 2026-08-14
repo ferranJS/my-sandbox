@@ -52,8 +52,7 @@ body {
 .grid-item.cellular {
   grid-area: cellular;
 }
-.grid-item.cellular iframe {
-}
+
 .grid-item.logos {
   grid-area: logos;
 }
@@ -187,7 +186,7 @@ body {
   margin: 0;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .main-title {
     font-size: 3rem;
     padding: 20px;
@@ -225,6 +224,8 @@ body {
   .grid-item h3 {
     font-size: 2rem;
   }
+  .grid-item.spain iframe {
+  }
   .grid-item a,
   .python-info p,
   .python-info h3 {
@@ -232,7 +233,7 @@ body {
   }
   .python-project img {
     width: 70px;
-    height: 70px;
+    height: 56px;
   }
 }
 
